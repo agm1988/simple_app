@@ -6,6 +6,9 @@ source 'http://gems.github.com'
 
 gem 'rails', '3.0.9'
 
+gem 'mynyml-redgreen'
+
+
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
@@ -39,5 +42,7 @@ gem 'rspec-rails', '2.6.1'
 group :test do
 gem 'rspec-rails', '2.6.1'
 gem "webrat", "~> 0.7.3"
+
+gem 'spork', '0.9.0.rc9'
 #   gem 'webrat'
  end
