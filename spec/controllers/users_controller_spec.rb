@@ -96,6 +96,36 @@ describe UsersController do
           flash[:success].should =~ /Welcome to the sample app/i
         end
 
+        it "shoud sign the user in" do
+          post :create, :user => @attr
+          controller.should be_signed_in
+        end
+
+    end
+
+    describe "exercises" do
+      it "should have name field" do
+        get :new
+        response.should have_selector("input[name='user[name]'][type='text']")
+
+      end
+
+      it "should have email field" do
+        get :new
+        response.should have_selector("input[name='user[email]'][type='text']")
+
+      end
+
+      it "should have password field" do
+        get :new
+        response.should have_selector("input[name='user[password]'] [type='password']")
+      end
+
+      it "should have confirmation field" do
+        get :new
+        response.should have_selector("input [name='user[password_confirmation]'] [type='password']")
+      end
+
     end
 
   end
