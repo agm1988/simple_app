@@ -9,6 +9,7 @@ gem 'rails', '3.0.9'
 gem 'mynyml-redgreen'
 
 gem 'gravatar_image_tag'
+gem 'will_paginate'
 
 
 # Bundle edge Rails instead:
@@ -40,6 +41,7 @@ group :development do
 gem 'rspec-rails', '2.6.1'
 #   gem 'webrat'
 gem 'annotate'
+gem 'faker'
  end
 
 group :test do
