@@ -34,6 +34,14 @@ describe UsersController do
       response.should have_selector("h1>img", :class => "gravatar")
     end
 
+    it "should show user's microposts'" do
+       mp1 = Factory(:micropost, :user => @user, :content => "Foo bar")
+       mp2 = Factory(:micropost, :user => @user, :content => "Baz quxx")
+      get :show, :id => @user
+      response.should have_selector("span.content", :content => mp1.content)
+      response.should have_selector("span.content", :content => mp2.content)
+    end
+
   end
 
 
@@ -331,7 +339,36 @@ describe UsersController do
           response.should redirect_to(users_path)
         end
       end
-    end
+  end
+
+   describe "micropost association" do
+     before(:each) do
+        @user = Factory(:user)
+       #@user = User.create(@attr)
+       @mp1 = Factory(:micropost, :user => @user, :created_at => 1.day.ago)
+       @mp2 = Factory(:micropost, :user => @user, :created_at => 1.hour.ago)
+      #@mp1 = @user.microposts.create!(:content => "1")
+      #@mp2 = @user.microposts.create!(:content => "2")
+     end
+
+
+     it "should have a microposts attribute" do
+         @user.should respond_to(:microposts)
+       end
+
+       it "should have the right microposts in the right order" do
+         @user.microposts.should == [@mp2, @mp1]
+       end
+
+     it "should destroy associated microposts" do
+        @user.destroy
+        [@mp1, @mp2].each do |micropost|
+          Micropost.find_by_id(micropost.id).should be_nil
+        end
+     end
+
+
+   end
 
 
 

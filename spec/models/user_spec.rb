@@ -160,6 +160,37 @@ describe User do
 
   end
 
+  describe "micropost associations" do
+
+    before(:each) do
+      @user = User.create(@attr)
+    end
+
+    it "should have a microposts attribute" do
+      @user.should respond_to(:microposts)
+    end
+
+    describe "status feed" do
+      it "should have a feed do" do
+        @user.should respond_to(:feed)
+      end
+      #it "should include user's microposts'" do
+      #  @user.feed.include?(@mp1).should be_true
+      #  @user.feed.include?(@mp2).should be_true
+      #end
+
+      it "should not include different users's microposts'" do
+        mp3 = Factory(:micropost, :user => Factory(:user, :email => Factory.next(:email)))
+        @user.feed.include?(mp3).should be_false
+      end
+
+
+    end
+
+
+  end
+
+
 
 
 
