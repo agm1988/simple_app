@@ -187,7 +187,90 @@ describe User do
 
     end
 
+    describe "status feed" do
+      it "should have a feed" do
+        @user.should respond_to(:feed)
+      end
+      it "should include a users microposts" do
+        @mp1 = @user.microposts.create!(:content => "ssss")
+        @mp2 = @user.microposts.create!(:content => "sssszxZxz")
+        @user.feed.should include(@mp1)
+        @user.feed.should include(@mp2)
+      end
+      it "should not ionclude different users microposts" do
+        mp3 = Factory(:micropost, :user => Factory(:user, :email => Factory.next(:email)))
+        @user.feed.should_not include(mp3)
+      end
+      it "should include microposts of followed users" do
+        followed = Factory(:user, :email => Factory.next(:email))
+        mp3 = Factory(:micropost, :user => followed)
+        @user.follow!(followed)
+        @user.feed.should include(mp3)
+      end
 
+    end
+
+
+  end
+
+  describe "Relationship" do
+    before(:each) do
+      @user = User.create!(@attr)
+      @followed = Factory(:user)
+    end
+    it "should have a relationship method" do
+      @user.should respond_to(:relationships)
+    end
+
+  end
+
+    describe "relationship" do
+    before(:each) do
+    @user = User.create!(@attr)
+    @followed = Factory(:user)
+    end
+
+    it "should have a relationship method" do
+      @user.should respond_to(:relationships)
+    end
+    it "should have a following method" do
+      @user.should respond_to(:following)
+    end
+
+    it "should have a following? method" do
+      @user.should respond_to(:following?)
+    end
+    it "should respond to follow! method" do
+      @user.should respond_to(:follow!)
+    end
+    it "should follow another user" do
+      @user.follow!(@followed)
+      @user.should be_following(@followed)
+    end
+    it "should include the followed user in the following array" do
+      @user.follow!(@followed)
+      @user.following.should include(@followed)
+    end
+
+    it "should have an unfollow! method" do
+      @followed.should respond_to(:unfollow!)
+    end
+    it "should unfollow a user" do
+      @user.follow!(@followed)
+      @user.unfollow!(@followed)
+      @user.should_not be_following(@followed)
+    end
+
+    it "should have a reverse relationship method" do
+      @user.should respond_to(:reverse_relationships)
+    end
+    it "should have a followers method" do
+      @user.should respond_to(:followers)
+    end
+    it "should include followers in the followers array" do
+      @user.follow!(@followed)
+      @followed.followers.should include(@user)
+    end
   end
 
 
